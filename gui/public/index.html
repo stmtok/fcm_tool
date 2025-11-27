@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>FCMテスト送信ツール</title>
+    <style>
+        /* CSS スタイル定義 (省略。既存のスタイルを利用) */
+        /* ★追加分のスタイルのみ記述 ★ */
+        .save-load-area {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px dashed #ced4da;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+        }
+
+        .save-group, .load-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .saved-list {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+
+        .saved-list button {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            font-size: 14px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        .saved-list button:hover {
+            background-color: #0056b3;
+        }
+        /* ★追加分のスタイル 終了★ */
+
+        /* 既存のCSSをここにコピペ */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 30px;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        textarea, input[type="text"] { /* input[type="text"] もスタイルに追加 */
+            width: calc(100% - 12px); 
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            resize: vertical;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        #deviceTokens {
+            min-height: 100px;
+        }
+
+        #payload {
+            min-height: 250px;
+        }
+
+        .button-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:first-child { 
+            background-color: #6c757d;
+            color: white;
+        }
+
+        button:first-child:hover {
+            background-color: #5a6268;
+        }
+
+        button:last-child { 
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+        }
+
+        button:last-child:hover {
+            background-color: #218838;
+        }
+
+        #status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            background-color: #e9ecef;
+            border: 1px solid #dee2e6;
+            white-space: pre-wrap;
+            word-break: break-all;
+            min-height: 40px;
+        }
+
+        .status-error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        .status-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+    </style>
+</head>
+<body onload="loadSavedList()"> <div class="container">
+        <h1>🚀 FCM テスト送信 (マルチキャスト対応)</h1>
+        
+        <label for="deviceTokens">デバイス トークン (複数指定可、改行区切り):</label>
+        <textarea id="deviceTokens" rows="5" placeholder="FCM Registration Token 1&#10;FCM Registration Token 2&#10;..."></textarea>
+        
+        <label for="payload">ペイロード (JSON):</label>
+        <textarea id="payload" rows="15" placeholder='{"notification": {"title": "テスト通知", "body": "Web画面からのメッセージです"}, "data": {"key": "value"}}' required></textarea>
+        
+        <div class="button-group">
+            <button type="button" onclick="formatJson()">JSON整形</button>
+            <button type="button" onclick="sendMessage()">送信</button>
+        </div>
+        
+        <label>送信結果:</label>
+        <p id="status"></p>
+
+        <div class="save-load-area">
+            <h2>💾 テンプレートの保存・読み出し</h2>
+
+            <label for="saveName">テンプレート名:</label>
+            <div class="save-group">
+                <input type="text" id="saveName" placeholder="テンプレート保存名" style="flex-grow: 1;">
+                <button type="button" onclick="saveTemplate()" style="width: 150px; background-color: #ffc107; color: #343a40; font-weight: normal; padding: 10px 0;">保存</button>
+            </div>
+            
+            <label>保存済みリスト:</label>
+            <div id="savedList" class="saved-list">
+                リストを読み込み中...
+            </div>
+        </div>
+        </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

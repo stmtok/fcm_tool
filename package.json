@@ -4,7 +4,12 @@
   "main": "send-fcm.js",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "gui": "node gui/server.js"
+  },
   "dependencies": {
-    "firebase-admin": "^13.6.0"
+    "express": "^5.1.0",
+    "firebase-admin": "^13.6.0",
+    "fs-extra": "^11.3.2"
   }
 }
