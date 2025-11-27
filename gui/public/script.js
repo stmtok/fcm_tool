@@ -17,15 +17,33 @@ function updateStatus(message, isError = false) {
     statusElement.textContent = message;
 }
 
-// JSON整形機能 (変更なし)
+// JSON整形機能
 function formatJson() {
-    updateStatus('', false); // ステータスをリセット
+    const payloadTextarea = document.getElementById('payload');
+    const statusElement = document.getElementById('status');
+    
+    // ステータスをリセット
+    statusElement.className = ''; 
+    
+    let jsonString = payloadTextarea.value.trim();
+
+    // -----------------------------------------------------------
+    // ★追加ロジック: 不正な末尾のカンマを安全に削除
+    // -----------------------------------------------------------
+    // 正規表現: 閉じ括弧 '}' または ']' の直前にある任意の空白とカンマを削除
+    // 例: {"key": "value", } -> {"key": "value"}
+    jsonString = jsonString.replace(/,\s*([}\]])/g, '$1');
+    // -----------------------------------------------------------
+
     try {
-        const payloadObject = JSON.parse(payloadTextarea.value);
+        // クリーンアップされた文字列をパース
+        const payloadObject = JSON.parse(jsonString);
+        
+        // JSONをインデントして整形し、textareaに戻す
         payloadTextarea.value = JSON.stringify(payloadObject, null, 2);
         updateStatus('JSONを整形しました。');
     } catch (e) {
-        updateStatus('❌ 無効なJSON形式です。JSONを確認してください。', true);
+        updateStatus('❌ 無効なJSON形式です。', true);
         alert('無効なJSON形式です。'); 
     }
 }

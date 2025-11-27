@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ★追加: 保存用ディレクトリ
-const DATA_DIR = path.join(__dirname, 'saved_data');
+const DATA_DIR = path.join(__dirname, '../saved_data');
 // ディレクトリが存在しない場合は作成
 fs.ensureDirSync(DATA_DIR);
 
